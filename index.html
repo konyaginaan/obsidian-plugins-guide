@@ -1,0 +1,344 @@
+<title>Смарт Коннекшнс и Templater — гайд для новичков</title>
+<style>
+  :root {
+    --bg: #F3F1F7;
+    --surface: #FFFFFF;
+    --ink: #221F2E;
+    --ink-soft: #56516B;
+    --ink-faint: #8681A0;
+    --accent: #5B4FA0;
+    --accent-deep: #3E3570;
+    --accent-tint: #E9E5F5;
+    --line: #DEDAE8;
+    --line-strong: #C7C0DC;
+    --warn-ink: #7A4B12;
+    --warn-tint: #F5E9D6;
+    --warn-line: #E3CFA0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17151F;
+      --surface: #201D2C;
+      --ink: #EDEBF4;
+      --ink-soft: #B4AEC7;
+      --ink-faint: #7A7492;
+      --accent: #A79AE8;
+      --accent-deep: #C9BFF2;
+      --accent-tint: #2C2740;
+      --line: #34304A;
+      --line-strong: #453F60;
+      --warn-ink: #E8CB98;
+      --warn-tint: #362B18;
+      --warn-line: #5A4523;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17151F;
+    --surface: #201D2C;
+    --ink: #EDEBF4;
+    --ink-soft: #B4AEC7;
+    --ink-faint: #7A7492;
+    --accent: #A79AE8;
+    --accent-deep: #C9BFF2;
+    --accent-tint: #2C2740;
+    --line: #34304A;
+    --line-strong: #453F60;
+    --warn-ink: #E8CB98;
+    --warn-tint: #362B18;
+    --warn-line: #5A4523;
+  }
+  :root[data-theme="light"] {
+    --bg: #F3F1F7;
+    --surface: #FFFFFF;
+    --ink: #221F2E;
+    --ink-soft: #56516B;
+    --ink-faint: #8681A0;
+    --accent: #5B4FA0;
+    --accent-deep: #3E3570;
+    --accent-tint: #E9E5F5;
+    --line: #DEDAE8;
+    --line-strong: #C7C0DC;
+    --warn-ink: #7A4B12;
+    --warn-tint: #F5E9D6;
+    --warn-line: #E3CFA0;
+  }
+  * { box-sizing: border-box; }
+  .guide {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .guide h1, .guide h2, .guide h3 {
+    font-family: Georgia, "Noto Serif", serif;
+    font-weight: 400;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .guide h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 0.6rem; }
+  .guide .lede { font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 1.75rem; max-width: 60ch; }
+  .guide h2 {
+    font-size: 1.5rem;
+    margin: 3rem 0 0.35rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .guide h2 .eyebrow {
+    display: block;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .guide h3 { font-size: 1.05rem; margin: 1.75rem 0 0.5rem; color: var(--ink); }
+  .guide p { margin: 0 0 1rem; max-width: 62ch; }
+  .guide .sub { color: var(--ink-soft); font-size: 0.95rem; margin: -0.5rem 0 1.25rem; max-width: 60ch; }
+
+  nav.toc {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0 0 2.25rem;
+  }
+  nav.toc a {
+    font-size: 0.85rem;
+    color: var(--accent-deep);
+    background: var(--accent-tint);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    text-decoration: none;
+  }
+  nav.toc a:hover { border-color: var(--accent); }
+
+  ol.steps { list-style: none; margin: 1.25rem 0; padding: 0; display: flex; flex-direction: column; gap: 0.9rem; }
+  ol.steps li {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+  ol.steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--accent-tint);
+    color: var(--accent-deep);
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: start;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  ol.steps { counter-reset: step; }
+  ol.steps p { margin: 0; }
+  ol.steps b { color: var(--ink); }
+
+  aside.tip, aside.check {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    margin: 1.25rem 0;
+    font-size: 0.95rem;
+  }
+  aside.check { border-color: var(--accent); }
+  aside.check .label, aside.tip .label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: 0.35rem;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  aside.tip p, aside.check p { margin: 0; max-width: none; }
+
+  .mock {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .mock .mock-row { display: flex; gap: 0.6rem; align-items: baseline; margin-bottom: 0.6rem; }
+  .mock .mock-row:last-child { margin-bottom: 0; }
+  .mock .mock-label { font-size: 0.8rem; color: var(--ink-faint); min-width: 5.5rem; }
+  .mock .pill {
+    display: inline-block;
+    background: var(--accent-tint);
+    color: var(--accent-deep);
+    border-radius: 999px;
+    padding: 0.15rem 0.65rem;
+    font-size: 0.82rem;
+    margin: 0.1rem 0.3rem 0.1rem 0;
+  }
+  .mock .mock-value { font-size: 0.9rem; color: var(--ink-soft); }
+
+  details.trouble {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.75rem 1.1rem;
+    margin: 0.6rem 0;
+  }
+  details.trouble summary {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  details.trouble p { margin: 0.6rem 0 0.2rem; font-size: 0.92rem; color: var(--ink-soft); max-width: none; }
+
+  .divider-note {
+    background: var(--warn-tint);
+    border: 1px solid var(--warn-line);
+    color: var(--warn-ink);
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    font-size: 0.92rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .divider-note p { margin: 0; max-width: none; }
+
+  a { color: var(--accent-deep); }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="guide">
+  <h1>Настройка двух плагинов Obsidian</h1>
+  <p class="lede">Smart Connections сам находит заметки, похожие по смыслу. Templater сам расставляет структуру — теги и место для источника — в каждой новой заметке.</p>
+
+  <nav class="toc">
+    <a href="#smart-connections">Smart Connections</a>
+    <a href="#templater">Templater</a>
+    <a href="#trouble">Если что-то не работает</a>
+  </nav>
+
+  <div class="divider-note">
+    <p><strong>Перед началом.</strong> Оба плагина ставятся одинаково — через встроенный каталог Obsidian. Работает только на компьютере (Mac/Windows/Linux), не в мобильном приложении. Понадобится интернет один раз — на установку.</p>
+  </div>
+
+  <div class="divider-note">
+    <p><strong>Про язык интерфейса.</strong> Английские названия кнопок не меняются ни при каком языке Obsidian — в скобках русский вариант, но формулировка может отличаться версии от версии. Не нашли надпись — ищите по значку (не переводится): шестерёнка — настройки, пазл — плагины. Настройки самих плагинов почти всегда на английском независимо от языка Obsidian — это нормально.</p>
+  </div>
+
+  <h2 id="smart-connections"><span class="eyebrow">Часть 1</span>Smart Connections — умный поиск похожих заметок</h2>
+  <p class="sub">Показывает заметки, близкие по смыслу к той, что вы сейчас читаете — даже если между ними нет прямой ссылки [[...]].</p>
+
+  <aside class="tip">
+    <span class="label">Важно перед установкой</span>
+    <p>Smart Connections требователен к версии Obsidian — на старой версии он может не установиться или не заработать без объяснения причины. Проверьте версию заранее: <b>Settings</b> («Настройки») → в левом меню раздел <b>General</b> («Общие») → прокрутите вниз, там будет строка с номером текущей версии и кнопка <b>Check for updates</b> («Проверить обновления»). Если кнопка есть и предлагает обновление — нажмите и обновитесь, потом возвращайтесь к установке.</p>
+  </aside>
+
+  <h3>Установка</h3>
+  <ol class="steps">
+    <li><p>Откройте <b>Settings</b> («Настройки») — значок шестерёнки в самом низу левой боковой панели.</p></li>
+    <li><p>В меню настроек слева найдите и нажмите <b>Community plugins</b> («Сторонние плагины»).</p></li>
+    <li><p>Если видите кнопку <b>Turn on community plugins</b> («Включить сторонние плагины») — нажмите её. Obsidian покажет предупреждение про безопасность стороннего кода — это нормально, нажмите ещё раз, чтобы подтвердить.</p></li>
+    <li><p>Нажмите кнопку <b>Browse</b> («Обзор») — откроется каталог плагинов.</p></li>
+    <li><p>В строке поиска наверху введите <b>Smart Connections</b> — название плагина везде на английском, по-русски его не переводят и не ищут.</p></li>
+    <li><p>Нажмите на карточку плагина, затем на кнопку <b>Install</b> («Установить»).</p></li>
+    <li><p>После установки на месте кнопки появится переключатель — включите его (<b>Enable</b> / «Включить»).</p></li>
+    <li><p>Закройте настройки.</p></li>
+  </ol>
+
+  <aside class="check">
+    <span class="label">Проверка</span>
+    <p>Справа (или слева, если панели поменяны местами) появится новая иконка на боковой панели. Нажмите на неё — откроется панель Smart Connections. В первый раз плагину нужно время, чтобы «прочитать» все заметки — может занять от пары минут до получаса, в зависимости от размера хранилища. Пока идёт эта работа, панель может быть пустой или показывать индикатор загрузки — это ожидаемо, просто подождите.</p>
+  </aside>
+
+  <p>После этого при открытии любой заметки в панели будет появляться список похожих заметок с процентом совпадения — чем выше число, тем ближе смысл.</p>
+
+  <h2 id="templater"><span class="eyebrow">Часть 2</span>Templater — готовая структура для новой заметки</h2>
+  <p class="sub">При создании новой заметки автоматически подставляется заготовка — например, поле для тегов и поле для источника — вместо пустого листа.</p>
+
+  <h3>Установка</h3>
+  <ol class="steps">
+    <li><p>Так же как и раньше: <b>Settings</b> («Настройки») → <b>Community plugins</b> («Сторонние плагины») → <b>Browse</b> («Обзор»).</p></li>
+    <li><p>В поиске введите <b>Templater</b> (название на английском, не переводится), откройте карточку, нажмите <b>Install</b> («Установить»), затем включите переключатель (<b>Enable</b> / «Включить»).</p></li>
+  </ol>
+
+  <h3>Шаг 1 — папка для заготовок</h3>
+  <ol class="steps">
+    <li><p>В левой панели с файлами нажмите правой кнопкой мыши по названию хранилища (самый верх списка) → <b>New folder</b> («Новая папка»).</p></li>
+    <li><p>Назовите её, например, <b>Шаблоны</b>.</p></li>
+  </ol>
+
+  <h3>Шаг 2 — сама заготовка</h3>
+  <ol class="steps">
+    <li><p>Нажмите правой кнопкой по папке <b>Шаблоны</b> → <b>New note</b> («Новая заметка»). Назовите заметку, например, <b>Шаблон заметки</b>.</p></li>
+    <li><p>Внутри новой заметки найдите раздел <b>Properties</b> («Свойства») в самом верху (если не видно — наведите курсор чуть выше текста, появится строка с кнопкой «плюс»).</p></li>
+    <li><p>Нажмите <b>+ Add property</b> («Добавить свойство»), введите имя <b>tags</b> и выберите тип <b>List</b> («Список») — оставьте поле пустым, оно будет заполняться в каждой новой заметке отдельно.</p></li>
+    <li><p>Нажмите <b>+ Add property</b> ещё раз, введите имя <b>Источник</b>, тип — <b>Text</b> («Текст»), тоже оставьте пустым.</p></li>
+  </ol>
+
+  <p>Заготовка будет выглядеть так — это то, что появится наверху каждой новой заметки:</p>
+  <div class="mock">
+    <div class="mock-row"><span class="mock-label">Свойства</span></div>
+    <div class="mock-row"><span class="mock-label">tags</span><span class="pill">+ добавить</span></div>
+    <div class="mock-row"><span class="mock-label">Источник</span><span class="mock-value">—</span></div>
+  </div>
+
+  <h3>Шаг 3 — включить автоматическую подстановку</h3>
+  <p class="sub">Дальше — настройки самого плагина Templater. Они будут на английском независимо от языка Obsidian (это не ошибка, так у всех сторонних плагинов) — рядом даю перевод названий полей просто для понимания.</p>
+  <ol class="steps">
+    <li><p><b>Settings</b> («Настройки») → <b>Community plugins</b> («Сторонние плагины») → найдите в списке включённых плагинов <b>Templater</b> → нажмите на значок шестерёнки рядом с его названием.</p></li>
+    <li><p>Найдите поле <b>Template folder location</b> (переводится как «папка с шаблонами») — укажите папку <b>Шаблоны</b>, которую создали в шаге 1.</p></li>
+    <li><p>Включите переключатель <b>Trigger Templater on new file creation</b> (буквально «запускать Templater при создании нового файла») — из-за него заготовка будет подставляться сама, без лишних действий.</p></li>
+    <li><p>В поле выбора шаблона по умолчанию (обычно называется <b>Default new file template</b>) укажите заметку <b>Шаблон заметки</b>.</p></li>
+  </ol>
+
+  <aside class="check">
+    <span class="label">Проверка</span>
+    <p>Создайте новую заметку (значок с плюсом наверху левой панели или сочетание Cmd/Ctrl + N). Если сверху сразу видны пустые поля <b>tags</b> и <b>Источник</b> — всё настроено верно.</p>
+  </aside>
+
+  <h2 id="trouble"><span class="eyebrow">Если что-то пошло не так</span></h2>
+  <p class="sub">Ищите ситуацию, которая похожа на вашу, и делайте по шагам — не нужно разбираться, почему так вышло.</p>
+
+  <details class="trouble">
+    <summary>Не нахожу плагин, когда ищу его в каталоге</summary>
+    <p>Впишите название заново, буква в букву, латиницей: Smart Connections или Templater. Русской раскладкой или переводом искать не получится — названия плагинов всегда на английском.</p>
+    <p>Если название введено верно, но список всё равно пустой — проверьте, что компьютер подключён к интернету: каталог плагинов загружается из сети каждый раз, когда вы его открываете.</p>
+  </details>
+
+  <details class="trouble">
+    <summary>Не вижу кнопку «Turn on community plugins» / «Включить сторонние плагины»</summary>
+    <p>Скорее всего, они уже были включены раньше — тогда вместо этой кнопки сразу видна кнопка <b>Browse</b> («Обзор»). Можно смело переходить к следующему шагу.</p>
+  </details>
+
+  <details class="trouble">
+    <summary>Установила плагин, но после перезапуска Obsidian переключатель сам выключился</summary>
+    <p>Обычно это значит, что плагин не смог запуститься — чаще всего из-за устаревшей версии Obsidian. Проверьте версию: <b>Settings</b> («Настройки») → <b>General</b> («Общие») → внизу страницы номер версии и кнопка <b>Check for updates</b> («Проверить обновления»). Обновитесь, если предлагается, и включите плагин заново.</p>
+  </details>
+
+  <details class="trouble">
+    <summary>Templater не подставляет заготовку в новой заметке</summary>
+    <p>Загляните в настройки плагина (шестерёнка рядом с его названием в списке плагинов) и проверьте по порядку:</p>
+    <p>1. Включён ли переключатель <b>Trigger Templater on new file creation</b>.</p>
+    <p>2. Указана ли заметка-шаблон в поле выбора шаблона по умолчанию.</p>
+    <p>3. Правильно ли указана папка с шаблоном в поле <b>Template folder location</b> — если папку потом переименовали или переместили, здесь нужно поправить вручную.</p>
+  </details>
+
+  <details class="trouble">
+    <summary>Панель Smart Connections пустая или ничего не показывает</summary>
+    <p>Если хранилище большое (сотни заметок и больше), первичная обработка может идти долго — оставьте Obsidian открытым и просто подождите, ничего нажимать не нужно.</p>
+    <p>Если прошло больше часа и панель всё ещё пустая — откройте настройки плагина и проверьте, не стоит ли обработка на паузе. Если и это не помогло — вернитесь к самому первому шагу и проверьте версию Obsidian, устаревшая версия — самая частая причина.</p>
+  </details>
+
+  <details class="trouble">
+    <summary>Интерфейс Obsidian не на английском и не на русском (или незнакомый язык)</summary>
+    <p>Все инструкции выше всё равно сработают — ориентируйтесь на значки: шестерёнка всегда открывает настройки, значок пазла — плагины, значок с плюсом — создание новой заметки или папки. Расположение пунктов в меню от языка не зависит.</p>
+    <p>Если хочется на время переключить весь Obsidian на английский, чтобы легче было сверяться с этой инструкцией: <b>Settings</b> → <b>General</b> → поле <b>Language</b> → выбрать <b>English</b>. Обратно можно переключить в любой момент тем же способом.</p>
+  </details>
+</div>
