@@ -80,13 +80,18 @@
   }
   .guide h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 0.6rem; }
   .guide .lede { font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 1.75rem; max-width: 60ch; }
-  .guide h2 {
-    font-size: 1.5rem;
-    margin: 3rem 0 0.35rem;
-    padding-top: 0.25rem;
+  details.section {
     border-top: 1px solid var(--line);
+    margin: 2rem 0 0;
   }
-  .guide h2 .eyebrow {
+  details.section > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.4rem 2.25rem 1.1rem 0;
+    position: relative;
+  }
+  details.section > summary::-webkit-details-marker { display: none; }
+  details.section > summary .eyebrow {
     display: block;
     font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
     font-size: 0.75rem;
@@ -95,6 +100,30 @@
     color: var(--accent);
     margin-bottom: 0.5rem;
   }
+  details.section > summary .sec-title {
+    display: block;
+    font-family: Georgia, "Noto Serif", serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  details.section > summary::after {
+    content: "";
+    position: absolute;
+    right: 0.4rem;
+    top: 2.4rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 2px solid var(--ink-faint);
+    border-bottom: 2px solid var(--ink-faint);
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+  details.section[open] > summary::after { transform: rotate(225deg); }
+  details.section > summary:hover .sec-title { color: var(--accent-deep); }
+  details.section > .section-body { padding-bottom: 1.5rem; }
   .guide h3 { font-size: 1.05rem; margin: 1.75rem 0 0.5rem; color: var(--ink); }
   .guide p { margin: 0 0 1rem; max-width: 62ch; }
   .guide .sub { color: var(--ink-soft); font-size: 0.95rem; margin: -0.5rem 0 1.25rem; max-width: 60ch; }
@@ -249,7 +278,9 @@
     <a class="download-btn" href="https://konyaginaan.github.io/obsidian-plugins-guide/obsidian-plugins-starter-windows.zip" download>&#8595;&nbsp; Скачать для Windows</a>
   </div>
 
-  <h2 id="install"><span class="eyebrow">Установка</span>Один установщик вместо ручных шагов</h2>
+  <details class="section" id="install" open>
+  <summary><span class="eyebrow">Установка</span><span class="sec-title">Один установщик вместо ручных шагов</span></summary>
+  <div class="section-body">
   <p class="sub">В архиве — установщик, который сам разложит плагины по нужным папкам вашего хранилища и включит их. Не нужно искать скрытую папку .obsidian и копировать что-то вручную.</p>
 
   <ol class="steps">
@@ -266,10 +297,14 @@
 
   <details class="trouble">
     <summary>Хочу поставить вручную, без установщика</summary>
-    <p>Тоже можно — в архиве, кроме установщика, лежат сами файлы. Скопируйте три подпапки из <b>.obsidian/plugins</b> архива в папку <b>.obsidian/plugins</b> вашего хранилища (она скрытая — на Mac в Finder нажмите <b>Cmd + Shift + точка</b>, на Windows включите «Показывать скрытые файлы» в меню «Вид»). Папку <b>Templates</b> скопируйте в корень хранилища. Перезапустите Obsidian полностью и включите три плагина в <b>Settings → Community plugins</b>.</p>
+    <p>Тоже можно — в архиве, кроме установщика, лежат сами файлы. Скопируйте три подпапки из <b>.obsidian/plugins</b> архива в папку <b>.obsidian/plugins</b> вашего хранилища (она скрытая — на Mac в Finder нажмите <b>Cmd + Shift + точка</b>, на Windows включите «Показывать скрытые файлы» в меню «Вид»). Папку <b>Templates</b> скопируйте в корень хранилища. Перезапустите Obsidian полностью и включите три плагина в <b>Settings → Community plugins</b> («Настройки» → «Сторонние плагины»).</p>
+  </details>
+  </div>
   </details>
 
-  <h2 id="use-smart-connections"><span class="eyebrow">Как пользоваться</span>Smart Connections</h2>
+  <details class="section" id="use-smart-connections">
+  <summary><span class="eyebrow">Как пользоваться</span><span class="sec-title">Smart Connections</span></summary>
+  <div class="section-body">
   <p class="sub">Показывает заметки, близкие по смыслу к той, что вы сейчас читаете — даже если между ними нет прямой ссылки [[...]].</p>
   <ol class="steps">
     <li><p>Откройте любую заметку.</p></li>
@@ -281,7 +316,12 @@
     <p>В первый раз плагину нужно «прочитать» все заметки хранилища — от пары минут до получаса в зависимости от размера хранилища. Пока идёт эта работа, список может быть пустым или неполным — просто подождите, ничего нажимать не нужно.</p>
   </aside>
 
-  <h2 id="use-templater"><span class="eyebrow">Как пользоваться</span>Templater</h2>
+  </div>
+  </details>
+
+  <details class="section" id="use-templater">
+  <summary><span class="eyebrow">Как пользоваться</span><span class="sec-title">Templater</span></summary>
+  <div class="section-body">
   <p class="sub">Заготовка подставляется сама при создании новой заметки — остаётся только заполнить поля.</p>
   <ol class="steps">
     <li><p>Создайте новую заметку — значок с плюсом наверху левой панели, или сочетание <b>Cmd/Ctrl + N</b>.</p></li>
@@ -297,7 +337,12 @@
     <div class="mock-row"><span class="mock-label">Источник</span><span class="mock-value">—</span></div>
   </div>
 
-  <h2 id="use-omnisearch"><span class="eyebrow">Как пользоваться</span>Omnisearch</h2>
+  </div>
+  </details>
+
+  <details class="section" id="use-omnisearch">
+  <summary><span class="eyebrow">Как пользоваться</span><span class="sec-title">Omnisearch</span></summary>
+  <div class="section-body">
   <p class="sub">Встроенный поиск Obsidian на большом хранилище заметно тормозит. Omnisearch ищет так же быстро, даже если заметок много.</p>
   <ol class="steps">
     <li><p>Откройте <b>Command Palette</b> («Палитра команд») — <b>Cmd + P</b> на Mac или <b>Ctrl + P</b> на Windows/Linux.</p></li>
@@ -310,7 +355,12 @@
     <p>Готовой горячей клавиши у Omnisearch нет. Чтобы назначить свою: <b>Settings</b> → <b>Hotkeys</b> («Горячие клавиши») → в поиске настроек введите <b>Vault search</b> → нажмите <b>+</b> рядом с командой → нажмите нужное сочетание клавиш.</p>
   </aside>
 
-  <h2 id="trouble"><span class="eyebrow">Если что-то не так</span></h2>
+  </div>
+  </details>
+
+  <details class="section" id="trouble">
+  <summary><span class="eyebrow">Помощь</span><span class="sec-title">Если что-то не так</span></summary>
+  <div class="section-body">
   <p class="sub">Ищите ситуацию, похожую на вашу, и делайте по шагам.</p>
 
   <details class="trouble">
@@ -358,4 +408,25 @@
     <p>Все инструкции выше всё равно сработают — ориентируйтесь на значки: шестерёнка всегда открывает настройки, значок пазла — плагины, значок с плюсом — создание новой заметки. Расположение пунктов в меню от языка не зависит.</p>
     <p>Если хочется на время переключить весь Obsidian на английский: <b>Settings</b> → <b>General</b> → поле <b>Language</b> → выбрать <b>English</b>.</p>
   </details>
+  </div>
+  </details>
 </div>
+
+<script>
+  (function () {
+    function openTarget(hash) {
+      if (!hash || hash.length < 2) return;
+      var el = document.getElementById(hash.slice(1));
+      if (el && el.tagName === "DETAILS") el.open = true;
+    }
+    document.querySelectorAll("nav.toc a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        openTarget(a.getAttribute("href"));
+      });
+    });
+    openTarget(window.location.hash);
+    window.addEventListener("hashchange", function () {
+      openTarget(window.location.hash);
+    });
+  })();
+</script>
