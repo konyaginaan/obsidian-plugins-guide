@@ -263,6 +263,7 @@
 
   <nav class="toc">
     <a href="#install">Установка</a>
+    <a href="#manual-install">Ручная установка</a>
     <a href="#use-smart-connections">Smart Connections</a>
     <a href="#use-templater">Templater</a>
     <a href="#use-omnisearch">Omnisearch</a>
@@ -295,10 +296,23 @@
     <p>Откройте <b>Settings</b> («Настройки») → <b>Community plugins</b> («Сторонние плагины») — все три плагина в списке и включены (переключатели цветные, не серые). Установщик включает их сам; если какой-то выключен — просто включите переключатель. Дальше ничего донастраивать не нужно — разделы «Как пользоваться» ниже.</p>
   </aside>
 
-  <details class="trouble">
-    <summary>Хочу поставить вручную, без установщика</summary>
-    <p>Тоже можно — в архиве, кроме установщика, лежат сами файлы. Скопируйте три подпапки из <b>.obsidian/plugins</b> архива в папку <b>.obsidian/plugins</b> вашего хранилища (она скрытая — на Mac в Finder нажмите <b>Cmd + Shift + точка</b>, на Windows включите «Показывать скрытые файлы» в меню «Вид»). Папку <b>Templates</b> скопируйте в корень хранилища. Перезапустите Obsidian полностью и включите три плагина в <b>Settings → Community plugins</b> («Настройки» → «Сторонние плагины»).</p>
+  <p>Если установщик не запустился или что-то пошло не так — есть запасной способ: <a href="#manual-install">ручная установка</a>, следующий раздел.</p>
+
+  </div>
   </details>
+
+  <details class="section" id="manual-install">
+  <summary><span class="eyebrow">Установка</span><span class="sec-title">Ручная установка — если установщик не сработал</span></summary>
+  <div class="section-body">
+  <p class="sub">Запасной способ: в архиве, кроме установщика, лежат и сами файлы плагинов — их можно разложить руками.</p>
+
+  <ol class="steps">
+    <li><p>В распакованном архиве найдите папку <b>.obsidian</b>, а в ней — <b>plugins</b> с тремя подпапками: <b>smart-connections</b>, <b>templater-obsidian</b>, <b>omnisearch</b>. Папка <b>.obsidian</b> скрытая — если не видна: на Mac в окне Finder нажмите <b>Cmd + Shift + точка</b>, на Windows в проводнике включите «Показывать скрытые файлы» (обычно в меню «Вид»).</p></li>
+    <li><p>Скопируйте эти три подпапки в папку <b>.obsidian/plugins</b> вашего хранилища (она тоже скрытая — показывается тем же способом). Если папки <b>plugins</b> там нет — создайте её.</p></li>
+    <li><p>Папку <b>Templates</b> из архива скопируйте в корень вашего хранилища (туда же, где лежат остальные ваши заметки).</p></li>
+    <li><p>Перезапустите Obsidian полностью — закройте и откройте заново, обычной перезагрузки окна (Cmd/Ctrl + R) может не хватить.</p></li>
+    <li><p>Откройте <b>Settings</b> («Настройки») → <b>Community plugins</b> («Сторонние плагины») — все три новых плагина уже будут в списке установленных, но выключены. Включите переключатель у каждого из трёх — это последний шаг.</p></li>
+  </ol>
   </div>
   </details>
 
@@ -419,7 +433,7 @@
       var el = document.getElementById(hash.slice(1));
       if (el && el.tagName === "DETAILS") el.open = true;
     }
-    document.querySelectorAll("nav.toc a").forEach(function (a) {
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener("click", function () {
         openTarget(a.getAttribute("href"));
       });
